@@ -19,12 +19,27 @@ export default function Home(): JSX.Element {
   } = useInfiniteQuery(
     'images',
     // TODO AXIOS REQUEST WITH PARAM
-    ,
+    async ({ pageParam = null }) => {
+      const response = await api.get('/api/images', {
+        params: { after: pageParam },
+      });
+      return response.data;
+    },
     // TODO GET AND RETURN NEXT PAGE PARAM
+    {
+      // eslint-disable-next-line no-shadow
+      getNextPageParam: data => {
+        if (data.after) {
+          return data.after;
+        }
+        return null;
+      },
+    }
   );
 
   const formattedData = useMemo(() => {
-    // TODO FORMAT AND FLAT DATA ARRAY
+    console.log(data);
+    return data;
   }, [data]);
 
   // TODO RENDER LOADING SCREEN
